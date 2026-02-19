@@ -1,0 +1,13 @@
+#!/bin/bash
+# WebDAV client — edit the lines below
+URL="https://dav.example.com"
+USER="user"
+PASS="pass"
+VPN="tun0"  # set to your VPN interface, or leave blank to use default route
+
+case "$1" in
+  ls)  _r=$(curl -sku "$USER:$PASS" ${VPN:+--interface "$VPN"} -X PROPFIND -H "Depth: 1" "$URL${2:-/}")
+       printf '%s\n' "$_r" | grep -o 'href>[^<]*' | cut -d'>' -f2 | tr -d '\r' ;;
+  get) curl -fkLu "$USER:$PASS" ${VPN:+--interface "$VPN"} "$URL$2" -o "${2##*/}" ;;
+  *)   echo "Usage: $(basename "$0") ls [path] | get <path>" ;;
+esac
