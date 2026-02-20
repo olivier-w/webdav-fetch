@@ -12,7 +12,8 @@ case "$1" in
        if [ -f "$_out" ]; then echo "$_out ($(du -h "$_out" | cut -f1)): already exists"
        else curl -fkLu "$USER:$PASS" ${VPN:+--interface "$VPN"} "$URL$2" -o "$_out"
        fi ;;
-  getall) _paths=$(webdav ls "${2:-/}" | grep -v '/$')
+  getall) if [ -f "$2" ]; then _paths=$(cat "$2")
+          else _paths=$(webdav ls "${2:-/}" | grep -v '/$'); fi
           _n=0; _tot=$(printf '%s\n' "$_paths" | grep -c .)
           while IFS= read -r _p; do
             [ -z "$_p" ] && continue

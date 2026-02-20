@@ -45,6 +45,20 @@ Download all files in a folder (with progress counter):
 webdav getall /folder/
 ```
 
+Download files from a text file containing one path per line:
+```bash
+webdav getall urls.txt
+```
+
+Example `urls.txt`:
+```
+/folder/file1.jpg
+/folder/file2.jpg
+/other/folder/file3.mp4
+```
+
+This is useful for curating a list with `webdav ls`, then downloading later.
+
 Filter by file type:
 ```bash
 webdav ls /folder/ | grep '\.mp4$' | while read -r path; do
