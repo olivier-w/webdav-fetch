@@ -40,11 +40,9 @@ webdav get /folder/file.mp4
 
 Already-downloaded files are skipped automatically (shows filename and size). To pause a batch download, Ctrl+C and re-run — completed files will be skipped. If a download was interrupted mid-file, `rm` the partial file before re-running to retry it.
 
-Download all files in a folder:
+Download all files in a folder (with progress counter):
 ```bash
-webdav ls /folder/ | grep -v '/$' | while read -r path; do
-  webdav get "$path"
-done
+webdav getall /folder/
 ```
 
 Filter by file type:
