@@ -58,8 +58,14 @@ Set `VPN="wg0"` (or your interface name) at the top of the script to route all t
 
 ## Rename URL-encoded filenames (optional)
 
-If downloaded filenames contain `%20`, `%28` etc., run this in the download folder:
+If downloaded filenames contain `%20`, `%28` etc., use the included `decode-filenames` script:
 
 ```bash
-python3 -c "import urllib.parse, os; [os.rename(f, urllib.parse.unquote(f)) for f in os.listdir('.') if urllib.parse.unquote(f) != f]"
+# Preview what would be renamed
+python3 decode-filenames --dry-run /path/to/downloads
+
+# Apply
+python3 decode-filenames /path/to/downloads
 ```
+
+Omit the path to process the current directory.

@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+import urllib.parse, os, sys
+
+dry_run = '--dry-run' in sys.argv
+args = [a for a in sys.argv[1:] if not a.startswith('--')]
+directory = args[0] if args else '.'
+
+renamed = 0
+errors = 0
+
+for f in os.listdir(directory):
+    decoded = urllib.parse.unquote(f)
+    if decoded == f:
+        continue
+    src = os.path.join(directory, f)
+    dst = os.path.join(directory, decoded)
+    if dry_run:
+        print(f"Would rename: {f} → {decoded}")
+    else:
+        try:
+            os.rename(src, dst)
+            print(f"Renamed: {f} → {decoded}")
+            renamed += 1
+        except Exception as e:
+            print(f"Error renaming {f}: {e}", file=sys.stderr)
+            errors += 1
+
+if dry_run:
+    print("Dry run — no files changed.")
+else:
+    print(f"Done: {renamed} renamed, {errors} errors.")
