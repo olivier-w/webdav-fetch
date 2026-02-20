@@ -38,6 +38,8 @@ Download a single file:
 webdav get /folder/file.mp4
 ```
 
+Already-downloaded files are skipped automatically (shows filename and size). To pause a batch download, Ctrl+C and re-run — completed files will be skipped. If a download was interrupted mid-file, `rm` the partial file before re-running to retry it.
+
 Download all files in a folder:
 ```bash
 webdav ls /folder/ | grep -v '/$' | while read -r path; do
@@ -68,4 +70,4 @@ python3 decode-filenames --dry-run /path/to/downloads
 python3 decode-filenames /path/to/downloads
 ```
 
-Omit the path to process the current directory.
+Omit the path to process the current directory. Run this only after all downloads are complete — renaming files mid-batch causes the skip check to miss them and re-download.

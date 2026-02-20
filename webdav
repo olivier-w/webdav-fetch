@@ -8,6 +8,9 @@ VPN="tun0"  # set to your VPN interface, or leave blank to use default route
 case "$1" in
   ls)  _r=$(curl -sku "$USER:$PASS" ${VPN:+--interface "$VPN"} -X PROPFIND -H "Depth: 1" "$URL${2:-/}")
        printf '%s\n' "$_r" | grep -o 'href>[^<]*' | cut -d'>' -f2 | tr -d '\r' ;;
-  get) curl -fkLu "$USER:$PASS" ${VPN:+--interface "$VPN"} "$URL$2" -o "${2##*/}" ;;
+  get) _out="${2##*/}"
+       if [ -f "$_out" ]; then echo "$_out ($(du -h "$_out" | cut -f1)): already exists"
+       else curl -fkLu "$USER:$PASS" ${VPN:+--interface "$VPN"} "$URL$2" -o "$_out"
+       fi ;;
   *)   echo "Usage: $(basename "$0") ls [path] | get <path>" ;;
 esac
